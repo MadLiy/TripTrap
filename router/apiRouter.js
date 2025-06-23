@@ -1,6 +1,5 @@
 const express = require("express");
 const apiRouter = express.Router();
-
 const authRouter = require("./authRouter");
 const inscriptionsRouter = require("./inscriptionsRouter");
 const travelsRouter = require("./travelsRouter");

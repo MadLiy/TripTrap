@@ -3,6 +3,7 @@ const userRouter = express.Router();
 const controller = require("../controller/usersController");
 const { auth, isAdmin } = require('../middleware/auth');
 const userValidator = require('../validator/userValidator');
+const validate = require('../validator/validate');
 const { validationResult } = require('express-validator');
 
 // === Routes GET (affichage) ===
@@ -14,23 +15,12 @@ userRouter.get("/my-profile", auth, controller.myProfile);
 userRouter.get("/edit-profile", auth, controller.editProfile);
 
 // === Routes POST (actions) ===
-userRouter.post("/store", auth, isAdmin, userValidator.register, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  controller.store(req, res, next);
-});
+userRouter.post("/store", auth, isAdmin, userValidator.register, validate, controller.store);
 
-userRouter.post("/update/:id", auth, userValidator.userId, userValidator.updateProfile, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  controller.update(req, res, next);
-});
+userRouter.post("/update/:id", auth, userValidator.userId, userValidator.updateProfile, validate, controller.update);
 
-userRouter.post("/update-profile", auth, controller.updateProfile);
-userRouter.post("/delete/:id", auth, isAdmin, controller.delete);
+userRouter.post("/update-profile", auth, userValidator.updateProfile, validate, controller.updateProfile);
+
+userRouter.post("/delete/:id", auth, isAdmin, userValidator.userId, validate, controller.delete);
 
 module.exports = userRouter;

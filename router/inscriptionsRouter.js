@@ -4,7 +4,7 @@ const controller = require("../controller/inscriptionsController");
 const { auth, isAdmin } = require('../middleware/auth');
 const multer = require('multer');
 const { createInscription, inscriptionId } = require('../validator/inscriptionsValidator');
-const { validationResult } = require('express-validator');
+const validate = require('../validator/validate');
 const path = require('path');
 
 // === Multer : configuration du stockage et du filtre de type de fichier ===
@@ -49,34 +49,22 @@ inscriptionRouter.post(
 
 // === Routes statiques (GET) ===
 inscriptionRouter.get("/index", controller.index);
-inscriptionRouter.get('/travel/:travelId', auth, isAdmin, controller.inscriptionsByTravel);
+inscriptionRouter.get('/travel/:travelId', auth, isAdmin, inscriptionId, validate, controller.inscriptionsByTravel);
 inscriptionRouter.get('/mes-inscriptions', auth, controller.myInscriptions);
 inscriptionRouter.get("/create", controller.create);
-inscriptionRouter.get("/edit/:id", controller.edit);
-inscriptionRouter.get("/toggle-done/:id", controller.toggleDone);
-inscriptionRouter.get("/:id", controller.show);
-inscriptionRouter.get('/pay-acompte/:id', auth, controller.showPayAcompte);
+inscriptionRouter.get("/edit/:id", inscriptionId, validate, controller.edit);
+inscriptionRouter.get("/toggle-done/:id", inscriptionId, validate, controller.toggleDone);
+inscriptionRouter.get("/:id", inscriptionId, validate, controller.show);
+inscriptionRouter.get('/pay-acompte/:id', auth, inscriptionId, validate, controller.showPayAcompte);
 
 // === Actions dynamiques (POST/DELETE) ===
-inscriptionRouter.post('/pay-acompte/:id', auth, controller.payAcompte);
-inscriptionRouter.post('/validate-status/:id', auth, isAdmin, controller.validateStatus);
+inscriptionRouter.post('/pay-acompte/:id', auth, inscriptionId, validate, controller.payAcompte);
+inscriptionRouter.post('/validate-status/:id', auth, isAdmin, inscriptionId, validate, controller.validateStatus);
 
-inscriptionRouter.post("/store", auth, createInscription, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  controller.store(req, res, next);
-});
+inscriptionRouter.post("/store", auth, createInscription, validate, controller.store);
 
-inscriptionRouter.post("/update/:id", auth, inscriptionId, createInscription, (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-  controller.update(req, res, next);
-});
+inscriptionRouter.post("/update/:id", auth, inscriptionId, createInscription, validate, controller.update);
 
-inscriptionRouter.delete("/delete/:id", auth, controller.delete);
+inscriptionRouter.delete("/delete/:id", auth, inscriptionId, validate, controller.delete);
 
 module.exports = inscriptionRouter;
