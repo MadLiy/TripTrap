@@ -31,7 +31,7 @@ npm install
 Créez un fichier .env à la racine du projet avec les variables suivantes :
 
 ```
-PORT=3000
+PORT=3010
 MONGODB_URI=mongodb://localhost:27017/travelnow # ou votre URI MongoDB Atlas
 SECRET_KEY="votre_cle_secrete"
 JWT_SECRET="votre_cle_jwt"
@@ -81,11 +81,11 @@ Password : azerty
 
 ### 8. Structure du projet
 
-/controller : Logique métier (contrôleurs)
-/model : Schémas Mongoose
-/repositories : Accès aux données
-/service : Services applicatifs
-/views : Templates EJS
-/router : Définition des routes
-/middleware : Middlewares Express
-/validator : Validators express-validator
+* /controller : Logique métier (contrôleurs)
+* /model : Schémas Mongoose
+* /repositories : Accès aux données
+* /service : Services applicatifs
+* /views : Templates EJS
+* /router : Définition des routes
+* /middleware : Middlewares Express
+* /validator : Validators express-validator
