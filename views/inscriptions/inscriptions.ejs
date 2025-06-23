@@ -1,0 +1,39 @@
+<%- contentFor('title') %>Liste des inscriptions
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('main') %>
+<div class="container mt-5">
+  <h1 class="mb-4">Liste des inscriptions</h1>
+  <% if (inscriptions.length === 0) { %>
+    <div class="alert alert-info">Aucune inscription trouvée.</div>
+  <% } else { %>
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Voyage</th>
+          <th>Statut paiement</th>
+          <th>Statut</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% inscriptions.forEach(function(inscription) { %>
+          <tr>
+            <td><%= inscription.userId %></td>
+            <td><%= inscription.travel %></td>
+            <td><%= inscription.paymentStatus %></td>
+            <td><%= inscription.status %></td>
+            <td>
+              <a href="/api/inscriptions/<%= inscription._id %>" class="btn btn-primary btn-sm">Voir</a>
+              <a href="/api/inscriptions/edit/<%= inscription._id %>" class="btn btn-warning btn-sm">Modifier</a>
+              <form action="/api/inscriptions/delete/<%= inscription._id %>" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Supprimer cette inscription ?')">Supprimer</button>
+              </form>
+            </td>
+          </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

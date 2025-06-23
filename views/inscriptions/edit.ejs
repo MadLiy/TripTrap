@@ -1,0 +1,6 @@
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor("main")%>
+<form action="/api/inscriptions/update/<%= inscription.id%>" method="post">
+  <%- include('_inscriptionForm') %>
+</form>

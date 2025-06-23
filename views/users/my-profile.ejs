@@ -1,0 +1,17 @@
+<%- contentFor("header")%>
+<%- include('../_header') %>
+<%- contentFor("main")%>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
+    <h2 class="text-center mb-4">Mon profil</h2>
+    <ul class="list-group mb-3">
+      <li class="list-group-item"><strong>Prénom :</strong> <%= user.firstname %></li>
+      <li class="list-group-item"><strong>Nom :</strong> <%= user.lastname %></li>
+      <li class="list-group-item"><strong>Email :</strong> <%= user.email %></li>
+      <li class="list-group-item"><strong>Rôle :</strong> <%= user.roles %></li>
+    </ul>
+    <div class="d-grid">
+      <a href="/api/users/edit-profile" class="btn btn-warning">Modifier mon profil</a>
+    </div>
+  </div>
+</div>

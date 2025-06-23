@@ -1,0 +1,10 @@
+<%- contentFor("header")%>
+<%- contentFor("main")%>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
+    <h2 class="text-center mb-4">Inscription</h2>
+    <form action="/api/auth/register" method="post">
+      <%- include('_registerForm') %>
+    </form>
+  </div>
+</div>

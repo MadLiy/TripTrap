@@ -1,0 +1,14 @@
+<%- contentFor('title') %>Home 
+<%- contentFor('header') %>
+<!-- Pas besoin de nav ici, on va styliser les boutons -->
+
+<%- contentFor('main') %>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="max-width: 400px; width: 100%;">
+    <h1 class="text-center mb-4">Bienvenue</h1>
+    <div class="d-grid gap-3">
+      <a href="/api/auth/register" class="btn btn-primary btn-lg">S'inscrire</a>
+      <a href="/api/auth/login" class="btn btn-outline-primary btn-lg">Se connecter</a>
+    </div>
+  </div>
+</div>

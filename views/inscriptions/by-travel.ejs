@@ -1,0 +1,63 @@
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('main') %>
+<div class="container py-5">
+  <h1 class="mb-4">Inscriptions pour ce voyage</h1>
+  <% if (inscriptions.length === 0) { %>
+    <div class="alert alert-info">Aucune inscription pour ce voyage.</div>
+  <% } else { %>
+    <table class="table table-striped align-middle shadow-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Date d'inscription</th>
+          <th>Acompte</th>
+          <th>Statut</th>
+          <th>Documents</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% inscriptions.forEach(function(inscription) { %>
+        <tr>
+          <td><%= inscription.userId.firstname %></td>
+          <td><%= inscription.userId.lastname %></td>
+          <td><%= inscription.userId.email %></td>
+          <td><%= new Date(inscription.createdAt).toLocaleString() %></td>
+          <td>
+            <% if (inscription.acomptePaid) { %>
+              <span class="badge bg-success">Payé</span>
+            <% } else { %>
+              <span class="badge bg-warning text-dark">Non payé</span>
+            <% } %>
+          </td>
+          <td>
+            <span class="badge <%= inscription.status === 'confirmed' ? 'bg-success' : 'bg-warning text-dark' %>">
+              <%= inscription.status === 'confirmed' ? 'Confirmé' : 'En attente' %>
+            </span>
+            <% if (inscription.status === 'pending') { %>
+              <form action="/api/inscriptions/validate-status/<%= inscription._id %>?_method=POST" method="POST" class="d-inline ms-2">
+                <button type="submit" class="btn btn-sm btn-success">Valider inscription</button>
+              </form>
+            <% } %>
+          </td>
+            <td>
+              <% if (inscription.document && inscription.document.length > 0) { %>
+                <ul class="list-unstyled mb-0">
+                  <% inscription.document.forEach(function(doc) { %>
+                    <li>
+                      <a href="<%= doc.url %>" target="_blank"><%= doc.title %></a>
+                    </li>
+                  <% }) %>
+                </ul>
+              <% } else { %>
+                <span class="text-muted">Aucun</span>
+              <% } %>
+            </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  <% } %>
+</div>

@@ -1,0 +1,25 @@
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('main') %>
+<div class="container py-5">
+  <h2>Paiement de l'acompte</h2>
+  <p>Montant à payer : <%= travel.price %> €</p>
+  <% if (errorMsg) { %>
+    <div class="alert alert-danger"><%= errorMsg %></div>
+  <% } %>
+  <form action="/api/inscriptions/pay-acompte/<%= inscription._id %>" method="POST">
+    <button type="submit" class="btn btn-success">Payer l'acompte</button>
+  </form><br>
+  <form action="/api/inscriptions/upload-documents/<%= inscription._id %>" method="POST" enctype="multipart/form-data">
+  <% requiredDocuments.forEach(function(doc, i) { %>
+    <div class="mb-3">
+      <label class="form-label"><%= doc.title %> (PDF ou image)</label>
+      <input type="file" name="documents" class="form-control" required>
+      <input type="hidden" name="titles" value="<%= doc.title %>">
+    </div>
+  <% }) %>
+  <button type="submit" class="btn btn-primary">Envoyer les documents</button>
+</form>
+  <div class="mt-4">
+    <a href="/api/inscriptions/mes-inscriptions" class="btn btn-secondary">Retour à mes inscriptions</a>
+</div>

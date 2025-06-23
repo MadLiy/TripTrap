@@ -1,0 +1,63 @@
+<%- contentFor('title') %>Détail du voyage 
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('main') %>
+<div class="container py-5 d-flex justify-content-center align-items-center" style="min-height: 70vh;">
+  <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
+    <h2 class="text-center mb-4"><%= travel.departure %> → <%= travel.destination %></h2>
+    <ul class="list-group list-group-flush mb-3">
+      <li class="list-group-item"><strong>Départ :</strong> <%= travel.departure %></li>
+      <li class="list-group-item"><strong>Destination :</strong> <%= travel.destination %></li>
+      <li class="list-group-item"><strong>Date et heure de départ :</strong> <%= new Date(travel.departureDateTime).toLocaleString() %></li>
+      <li class="list-group-item"><strong>Date et heure d'arrivée :</strong> <%= new Date(travel.arrivalDateTime).toLocaleString() %></li>
+      <li class="list-group-item"><strong>Prix :</strong> <%= travel.price %> €</li>
+      <li class="list-group-item"><strong>Places :</strong> <%= travel.places %></li>
+      <li class="list-group-item">
+        <strong>Statut :</strong>
+        <span class="badge bg-<%= travel.status === 'available' ? 'success' : (travel.status === 'booked' ? 'warning' : 'danger') %>">
+          <%= travel.status === 'available' ? 'Disponible' : (travel.status === 'booked' ? 'Réservé' : 'Annulé') %>
+        </span>
+      </li>
+    </ul>
+    <% if (user && user.roles === 'admin') { %>
+    <div class="d-flex gap-2">
+      <a href="/api/travels/edit/<%= travel.id %>" class="btn btn-outline-warning w-100">Modifier</a>
+      <form action="/api/travels/delete/<%= travel.id %>" method="POST" class="w-100">
+        <input type="hidden" name="_method" value="DELETE" />
+        <button type="submit" class="btn btn-outline-danger w-100" onclick="return confirm('Êtes-vous sûr de vouloir supprimer?')">Supprimer</button>
+      </form>
+    </div><br>
+    <% } %>
+    <% if (travel.requiredDocuments && travel.requiredDocuments.length) { %>
+      <div class="mb-3">
+        <h5>Documents requis :</h5>
+        <ul>
+          <% travel.requiredDocuments.forEach(function(doc) { %>
+            <li>
+              <strong><%= doc.title %></strong>
+              <% if (doc.description) { %> : <%= doc.description %><% } %>
+            </li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+    <% if (user && user.roles === 'member') { %>
+      <% if (isAlreadyRegistered) { %>
+        <div class="alert alert-info text-center">Vous êtes déjà inscrit à ce voyage.</div>
+      <% } else { %>
+        <form action="/api/inscriptions/store" method="POST">
+          <input type="hidden" name="travel" value="<%= travel._id %>">
+          <button type="submit" class="btn btn-primary">S’inscrire à ce voyage</button>
+        </form>
+      <% } %>
+    <% } else if (!user) { %>
+      <a href="/api/auth/login" class="btn btn-outline-primary">Connectez-vous pour vous inscrire</a>
+    <% } %>
+    <% if (user && user.roles === 'admin') { %>
+      <a href="/api/inscriptions/travel/<%= travel._id %>" class="btn btn-info w-100 mb-2">Voir les inscriptions à ce voyage</a>
+    <% } %><br>
+    <div class="mt-3 text-center">
+      <a href="/api/travels/all" class="btn btn-link">← Retour à la liste</a>
+    </div>
+  </div>
+</div>

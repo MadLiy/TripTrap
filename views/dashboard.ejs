@@ -1,0 +1,29 @@
+<%- contentFor('title') %>Dashboard 
+<%- contentFor('header') %>
+
+<%- contentFor('main') %>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="max-width: 500px; width: 100%;">
+    <h1 class="text-center mb-3">Dashboard</h1>
+    <p class="text-center mb-4">
+      Bienvenue <strong><%= user.firstname %> <%= user.lastname %></strong><br>
+      <span class="badge bg-secondary">Rôle : <%= user.roles %></span>
+    </p>
+    <div class="d-grid gap-3 mb-4">
+      <a href="/api/travels/all" class="btn btn-primary btn-lg">Liste des voyages</a>
+      <% if (user && user.roles === 'admin') { %>
+        <a href="/api/travels/create" class="btn btn-outline-secondary btn-lg">Créer un voyage</a>
+      <% } %>
+      <% if (user && user.roles === 'member') { %>
+      <a href="/api/inscriptions/mes-inscriptions" class="btn btn-outline-primary btn-lg">Mes inscriptions</a>
+      <% } %>
+      <% if (user && user.roles === 'admin') { %>
+        <a href="/api/users/all" class="btn btn-outline-secondary btn-lg">Voir les utilisateurs</a>
+      <% } %>
+      <a href="/api/users/my-profile" class="btn btn-outline-secondary btn-lg">Mon profil</a>
+    </div>
+    <div class="d-grid">
+      <a href="/api/auth/logout" class="btn btn-danger">Se déconnecter</a>
+    </div>
+  </div>
+</div>

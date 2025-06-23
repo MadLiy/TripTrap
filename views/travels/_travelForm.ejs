@@ -1,0 +1,58 @@
+<div class="mb-3">
+  <label for="departure" class="form-label">Départ</label>
+  <input type="text" class="form-control" id="departure" name="departure" value="<%= travel ? travel.departure : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="destination" class="form-label">Destination</label>
+  <input type="text" class="form-control" id="destination" name="destination" value="<%= travel ? travel.destination : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="departureDateTime" class="form-label">Date et heure de départ</label>
+  <input type="datetime-local" class="form-control" id="departureDateTime" name="departureDateTime" value="<%= travel ? travel.departureDateTime?.toISOString().slice(0,16) : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="arrivalDateTime" class="form-label">Date et heure d'arrivée</label>
+  <input type="datetime-local" class="form-control" id="arrivalDateTime" name="arrivalDateTime" value="<%= travel ? travel.arrivalDateTime?.toISOString().slice(0,16) : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="price" class="form-label">Prix</label>
+  <input type="number" class="form-control" id="price" name="price" step="0.01" value="<%= travel ? travel.price : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="places" class="form-label">Nombre de places</label>
+  <input type="number" class="form-control" id="places" name="places" value="<%= travel ? travel.places : '' %>" required>
+</div>
+<div class="mb-3">
+  <label for="status" class="form-label">Statut</label>
+  <select class="form-select" id="status" name="status">
+    <option value="available" <%= travel && travel.status === 'available' ? 'selected' : '' %>>Disponible</option>
+    <option value="booked" <%= travel && travel.status === 'booked' ? 'selected' : '' %>>Complet</option>
+    <option value="canceled" <%= travel && travel.status === 'canceled' ? 'selected' : '' %>>Annulé</option>
+  </select>
+</div>
+
+<div class="mb-3">
+  <label class="form-label">Documents requis</label>
+  <div id="documents-container">
+    <% if (travel && travel.requiredDocuments && travel.requiredDocuments.length) { %>
+      <% travel.requiredDocuments.forEach(function(doc, i) { %>
+        <div class="document-group mb-2 d-flex gap-2">
+          <input type="text" class="form-control" name="requiredDocuments[<%= i %>][title]" placeholder="Titre du document" value="<%= doc.title %>" required>
+          <input type="text" class="form-control" name="requiredDocuments[<%= i %>][description]" placeholder="Description" value="<%= doc.description %>">
+          <button type="button" class="btn btn-danger" onclick="removeDocument(this)">Supprimer</button>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <div class="document-group mb-2 d-flex gap-2">
+        <input type="text" class="form-control" name="requiredDocuments[0][title]" placeholder="Titre du document" required>
+        <input type="text" class="form-control" name="requiredDocuments[0][description]" placeholder="Description">
+        <button type="button" class="btn btn-danger" onclick="removeDocument(this)">Supprimer</button>
+      </div>
+    <% } %>
+  </div>
+  <button type="button" class="btn btn-secondary mt-2" onclick="addDocument()">Ajouter un document</button>
+</div>
+
+<div class="d-grid">
+  <button type="submit" class="btn btn-primary">Valider</button>
+</div>

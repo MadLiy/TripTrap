@@ -1,0 +1,30 @@
+<%- contentFor('title') %>Détail de l'inscriptions
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('main') %>
+<div class="container mt-5">
+  <h1>Détail de l'inscription</h1>
+  <ul class="list-group mb-4">
+    <li class="list-group-item"><strong>Prénom :</strong> <%= inscription.firstName %></li>
+    <li class="list-group-item"><strong>Nom :</strong> <%= inscription.lastName %></li>
+    <li class="list-group-item"><strong>Email :</strong> <%= inscription.email %></li>
+    <li class="list-group-item"><strong>Téléphone :</strong> <%= inscription.phone %></li>
+    <li class="list-group-item">
+      <strong>Voyage :</strong>
+      <% if (inscription.travel && inscription.travel.departure && inscription.travel.destination) { %>
+        <%= inscription.travel.departure %> → <%= inscription.travel.destination %>
+      <% } else { %>
+        Voyage inconnu
+      <% } %>
+    </li>
+    <li class="list-group-item">
+      <strong>Date d'inscription :</strong>
+      <%= inscription.createdAt ? inscription.createdAt.toLocaleString() : '' %>
+    </li>
+  </ul>
+  <a href="/api/inscriptions" class="btn btn-secondary">Retour à la liste</a>
+  <a href="/api/inscriptions/edit/<%= inscription._id %>" class="btn btn-warning">Modifier</a>
+  <form action="/api/inscriptions/delete/<%= inscription._id %>" method="POST" style="display:inline;">
+    <button type="submit" class="btn btn-danger" onclick="return confirm('Supprimer cette inscription ?')">Supprimer</button>
+  </form>
+</div>

@@ -1,0 +1,48 @@
+<%- contentFor('title') %>Liste des utilisateurs
+<%- contentFor('header') %>
+
+<%- include('../_header') %>
+
+<%- contentFor('main') %>
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="mb-0">Liste des utilisateurs</h1>
+    <a href="/api/users/create" class="btn btn-success">Créer un utilisateur</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped align-middle shadow-sm">
+      <thead class="table-light">
+        <tr>
+          <th>Prénom</th>
+          <th>Nom</th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Créé le</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function(user) { %>
+        <tr>
+          <td><%= user.firstname %></td>
+          <td><%= user.lastname %></td>
+          <td><%= user.email %></td>
+          <td>
+            <span class="badge <%= user.roles === 'admin' ? 'bg-danger' : 'bg-secondary' %>">
+              <%= user.roles %>
+            </span>
+          </td>
+          <td><%= new Date(user.createdAt).toLocaleString() %></td>
+          <td class="d-flex gap-2">
+            <a href="/api/users/edit/<%= user.id %>" class="btn btn-warning btn-sm">Modifier</a>
+            <form action="/api/users/delete/<%= user.id %>" method="POST" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer?')">
+              <input type="hidden" name="_method" value="DELETE" />
+              <button type="submit" class="btn btn-danger btn-sm">Supprimer</button>
+            </form>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+</div>

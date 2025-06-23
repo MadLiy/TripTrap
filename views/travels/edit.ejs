@@ -1,0 +1,12 @@
+<%- contentFor('header') %>
+<%- include('../_header') %>
+<%- contentFor('title') %>Modifier le voyage
+<%- contentFor("main")%>
+<div class="container d-flex flex-column justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="max-width: 600px; width: 100%;">
+    <h2 class="text-center mb-4">Modifier le voyage</h2>
+    <form action="/api/travels/update/<%= travel.id %>" method="post">
+      <%- include('_travelForm', { travel }) %>
+    </form>
+  </div>
+</div>
