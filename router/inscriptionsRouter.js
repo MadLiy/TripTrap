@@ -7,39 +7,24 @@ const { createInscription, inscriptionId } = require('../validator/inscriptionsV
 const { validationResult } = require('express-validator');
 const path = require('path');
 
-// Multer storage personnalisé
+// === Multer : configuration du stockage et du filtre de type de fichier ===
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, 'uploads/');
   },
   filename: (req, file, cb) => {
-    // Récupère les infos nécessaires depuis req.body et req.user
-    // titles[] est envoyé dans le même ordre que les fichiers
-    // On suppose que req.body.titles existe et que req.user est bien rempli par le middleware auth
-
-    // Récupère l'index du fichier courant
-    const index = req.files ? req.files.length : 0;
-    // Récupère le titre du document requis (nomdudocumentrequis)
+    // Construction du nom de fichier personnalisé
     let docTitle = '';
     if (Array.isArray(req.body.titles)) {
-      docTitle = req.body.titles[index] || 'document';
+      docTitle = req.body.titles[req.files ? req.files.length : 0] || 'document';
     } else {
       docTitle = req.body.titles || 'document';
     }
-    // Nettoie le titre
     docTitle = docTitle.replace(/[^a-zA-Z0-9\-_]/g, '');
-
-    // Récupère l'id du voyage
-    const idTravel = req.params.id || (req.body.travel || 'travel');
-
-    // Récupère le prénom et nom de l'utilisateur
+    const idTravel = req.params.id || req.body.travel || 'travel';
     const firstname = req.user?.firstname ? req.user.firstname.replace(/[^a-zA-Z0-9]/g, '') : 'user';
     const lastname = req.user?.lastname ? req.user.lastname.replace(/[^a-zA-Z0-9]/g, '').toUpperCase() : 'USER';
-
-    // Extension du fichier
     const ext = path.extname(file.originalname);
-
-    // Construit le nom final
     const filename = `${docTitle}-${idTravel}-${firstname}${lastname}${ext}`;
     cb(null, filename);
   }
@@ -52,9 +37,9 @@ const fileFilter = (req, file, cb) => {
     cb(new Error('Seuls les fichiers PDF, JPEG et PNG sont autorisés !'), false);
   }
 };
-
 const upload = multer({ storage: storage, fileFilter: fileFilter });
 
+// === Routes d'upload de documents ===
 inscriptionRouter.post(
   '/upload-documents/:id',
   auth,
@@ -62,18 +47,17 @@ inscriptionRouter.post(
   controller.uploadDocuments
 );
 
-// Routes statiques d'abord
+// === Routes statiques (GET) ===
 inscriptionRouter.get("/index", controller.index);
 inscriptionRouter.get('/travel/:travelId', auth, isAdmin, controller.inscriptionsByTravel);
 inscriptionRouter.get('/mes-inscriptions', auth, controller.myInscriptions);
 inscriptionRouter.get("/create", controller.create);
-
-// Routes dynamiques ensuite
 inscriptionRouter.get("/edit/:id", controller.edit);
 inscriptionRouter.get("/toggle-done/:id", controller.toggleDone);
 inscriptionRouter.get("/:id", controller.show);
-
 inscriptionRouter.get('/pay-acompte/:id', auth, controller.showPayAcompte);
+
+// === Actions dynamiques (POST/DELETE) ===
 inscriptionRouter.post('/pay-acompte/:id', auth, controller.payAcompte);
 inscriptionRouter.post('/validate-status/:id', auth, isAdmin, controller.validateStatus);
 
@@ -92,6 +76,7 @@ inscriptionRouter.post("/update/:id", auth, inscriptionId, createInscription, (r
   }
   controller.update(req, res, next);
 });
+
 inscriptionRouter.delete("/delete/:id", auth, controller.delete);
 
 module.exports = inscriptionRouter;

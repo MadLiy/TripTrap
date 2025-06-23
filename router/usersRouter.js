@@ -5,20 +5,15 @@ const { auth, isAdmin } = require('../middleware/auth');
 const userValidator = require('../validator/userValidator');
 const { validationResult } = require('express-validator');
 
-userRouter.get("/all", auth, isAdmin,  controller.index);
+// === Routes GET (affichage) ===
+userRouter.get("/all", auth, isAdmin, controller.index);
 userRouter.get("/create", auth, isAdmin, controller.create);
 userRouter.get("/edit/:id", auth, controller.edit);
-
 userRouter.get("/toggle-done/:id", controller.toggleDone);
-
 userRouter.get("/my-profile", auth, controller.myProfile);
-// Editer son profil (affichage du formulaire)
 userRouter.get("/edit-profile", auth, controller.editProfile);
-// Soumettre la modification
-userRouter.post("/update-profile", auth, controller.updateProfile);
 
-// userRouter.get("/:id", auth, controller.show);
-
+// === Routes POST (actions) ===
 userRouter.post("/store", auth, isAdmin, userValidator.register, (req, res, next) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -34,6 +29,8 @@ userRouter.post("/update/:id", auth, userValidator.userId, userValidator.updateP
   }
   controller.update(req, res, next);
 });
+
+userRouter.post("/update-profile", auth, controller.updateProfile);
 userRouter.post("/delete/:id", auth, isAdmin, controller.delete);
 
 module.exports = userRouter;
