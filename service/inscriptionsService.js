@@ -7,6 +7,7 @@ class InscriptionsService {
     this.moment = moment;
   }
 
+  // Récupère toutes les inscriptions
   async getAllInscriptions() {
     try {
       const allInscriptions = await this.inscriptionsRepository.findAll();
@@ -16,6 +17,7 @@ class InscriptionsService {
     }
   }
 
+  // Récupère une inscription par son id
   async getInscriptionsById(id) {
     try {
       const inscription = await this.inscriptionsRepository.findByPk(id);
@@ -28,6 +30,7 @@ class InscriptionsService {
     }
   }
 
+  // Crée une nouvelle inscription
   async createInscription(inscriptionData) {
     try {
       const newInscription = await this.inscriptionsRepository.create(inscriptionData);
@@ -40,6 +43,7 @@ class InscriptionsService {
     }
   }
 
+  // Met à jour une inscription par son id
   async updateInscription(id, inscriptionData) {
     try {
       const inscription = await this.inscriptionsRepository.findByPk(id);
@@ -50,13 +54,13 @@ class InscriptionsService {
       if (!updated) {
         return new Error("No inscriptions found");
       }
-
       return { message: "Inscription updated successfully" };
     } catch (error) {
       throw new Error("Error updating inscription: " + error.message);
     }
   }
 
+  // Récupère une inscription pour édition
   async editInscriptions(id) {
     try {
       const inscription = await this.inscriptionsRepository.findByPk(id);
@@ -69,19 +73,21 @@ class InscriptionsService {
     }
   }
 
+  // Supprime une inscription
   async deleteInscription(id) {
     try {
       const inscription = await this.inscriptionsRepository.findByPk(id);
       if (!inscription) {
         throw new Error("Inscription not found");
       }
-      await this.inscriptionsRepository.destroy( id );
+      await this.inscriptionsRepository.destroy(id);
       return { message: "Inscription deleted successfully" };
     } catch (error) {
       throw new Error("Error deleting inscription: " + error.message);
     }
   }
 
+  // Change le statut "done" d'une inscription
   async toggleDone(id) {
     try {
       const inscription = await this.inscriptionsRepository.findByPk(id);
@@ -96,30 +102,37 @@ class InscriptionsService {
     }
   }
 
+  // Récupère une inscription pour un utilisateur et un voyage donnés
   async findByUserAndTravel(userId, travelId) {
     return inscriptionsRepository.findByUserAndTravel(userId, travelId);
   }
 
+  // Crée une inscription (doublon, à fusionner avec createInscription)
   async createInscription(data) {
     return inscriptionsRepository.create(data);
   }
   
+  // Récupère toutes les inscriptions d'un utilisateur
   async getInscriptionsByUser(userId) {
     return inscriptionsRepository.findByUser(userId);
   }
 
+  // Récupère toutes les inscriptions pour un voyage
   async getInscriptionsByTravel(travelId) {
-      return this.inscriptionsRepository.findByTravel(travelId);
+    return this.inscriptionsRepository.findByTravel(travelId);
   }
 
+  // Marque l'acompte comme payé
   async setAcomptePaid(id) {
     return this.inscriptionsRepository.update(id, { acomptePaid: true, paymentStatus: 'completed' });
   }
 
+  // Met à jour le statut à "confirmed"
   async setStatusConfirmed(id) {
     return this.inscriptionsRepository.update(id, { status: 'confirmed' });
   }
 
+  // Ajoute des documents à une inscription
   async addDocuments(id, docs) {
     return this.inscriptionsRepository.pushDocuments(id, docs);
   }

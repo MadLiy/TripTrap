@@ -7,6 +7,7 @@ class UsersService {
     this.moment = moment;
   }
 
+  // Récupère tous les utilisateurs
   async getAllUsers() {
     try {
       const allUsers = await this.usersRepository.findAll();
@@ -19,6 +20,7 @@ class UsersService {
     }
   }
 
+  // Récupère un utilisateur par son id
   async getUserById(id) {
     try {
       const user = await this.usersRepository.findByPk(id);
@@ -31,6 +33,7 @@ class UsersService {
     }
   }
 
+  // Crée un nouvel utilisateur
   async createUser(userData) {
     try {
       const newUser = await this.usersRepository.create(userData);
@@ -43,6 +46,7 @@ class UsersService {
     }
   }
 
+  // Met à jour un utilisateur par son id
   async updateUser(id, userData) {
     try {
       const user = await this.usersRepository.findByPk(id);
@@ -67,6 +71,7 @@ class UsersService {
     }
   }
 
+  // Récupère un utilisateur pour édition
   async editUsers(id) {
     try {
       const user = await this.usersRepository.findByPk(id);
@@ -79,6 +84,7 @@ class UsersService {
     }
   }
 
+  // Supprime un utilisateur
   async deleteUser(id) {
     try {
       const user = await this.usersRepository.findByPk(id);
@@ -92,6 +98,7 @@ class UsersService {
     }
   }
 
+  // Change le statut "done" d'un utilisateur
   async toggleDone(id) {
     try {
       const user = await this.usersRepository.findByPk(id);
@@ -106,6 +113,7 @@ class UsersService {
     }
   }
 
+  // Récupère un utilisateur par son email
   async getUserByEmail(email) {
     return this.usersRepository.getUserByEmail(email);
   }

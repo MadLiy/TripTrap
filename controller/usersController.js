@@ -4,6 +4,8 @@ class UsersController {
   constructor() {
     this.usersService = usersService;
   }
+
+  // Affiche la liste de tous les utilisateurs (admin)
   index = async (req, res) => {
     try {
       const users = await this.usersService.getAllUsers();
@@ -14,6 +16,7 @@ class UsersController {
     }
   };
 
+  // Crée un nouvel utilisateur
   store = async (req, res) => {
     try {
       await this.usersService.createUser(req.body);
@@ -24,6 +27,7 @@ class UsersController {
     }
   };
 
+  // Affiche le formulaire de création d'utilisateur
   create = (req, res) => {
     try {
       res.render("users/create");
@@ -33,6 +37,7 @@ class UsersController {
     }
   };
 
+  // Met à jour un utilisateur
   update = async (req, res) => {
     try {
       await this.usersService.updateUser(req.params.id, req.body);
@@ -43,6 +48,7 @@ class UsersController {
     }
   };
 
+  // Affiche le formulaire d'édition d'un utilisateur
   edit = async (req, res) => {
     try {
       const user = await this.usersService.editUsers(req.params.id);
@@ -53,6 +59,7 @@ class UsersController {
     }
   };
 
+  // Supprime un utilisateur
   delete = async (req, res) => {
     try {
       await this.usersService.deleteUser(req.params.id);
@@ -63,6 +70,7 @@ class UsersController {
     }
   };
 
+  // Change le statut "done" d'un utilisateur
   toggleDone = async (req, res) => {
     try {
       await this.usersService.toggleDone(req.params.id);
@@ -95,7 +103,7 @@ class UsersController {
     }
   };
 
-  // Met à jour le profil
+  // Met à jour le profil du membre connecté
   updateProfile = async (req, res) => {
     try {
       await this.usersService.updateUser(req.user._id, req.body);

@@ -1,8 +1,7 @@
 const auth = require('../middleware/auth');
 const authService = require('../service/authService');
 
-
-
+// Affiche le formulaire d'inscription
 const showRegisterForm = (req, res) => {
     try {
         res.render('auth/register');
@@ -12,6 +11,7 @@ const showRegisterForm = (req, res) => {
     }
 };
 
+// Gère l'inscription d'un utilisateur
 const register = async (req, res) => {
     try {
         const user = await authService.register(req.body);
@@ -31,6 +31,7 @@ const register = async (req, res) => {
     }
 };
 
+// Affiche le formulaire de connexion
 const showLoginForm = (req, res) => {
     try {
         res.render('auth/login');
@@ -40,6 +41,7 @@ const showLoginForm = (req, res) => {
     }
 };
 
+// Gère la connexion d'un utilisateur
 const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -67,6 +69,7 @@ const login = async (req, res) => {
     }
 };
 
+// Gère la déconnexion de l'utilisateur
 const logout = async (req, res) => {
     try {
         res.clearCookie('token');

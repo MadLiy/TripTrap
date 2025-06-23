@@ -1,21 +1,18 @@
 const jwt = require('jsonwebtoken');
 const User = require('../model/users');
 
+// Middleware d'authentification : vérifie le token JWT et récupère l'utilisateur
 const auth = async (req, res, next) => {
     try {
         const token = req.cookies.token;
-        
         if (!token) {
             return res.redirect('/api/auth/login');
         }
-
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
         const user = await User.findById(decoded.userId);
-
         if (!user) {
             return res.redirect('/api/auth/login');
         }
-
         req.user = user;
         req.token = token;
         next();
@@ -24,6 +21,7 @@ const auth = async (req, res, next) => {
     }
 };
 
+// Middleware d'autorisation : vérifie que l'utilisateur est admin
 const isAdmin = async (req, res, next) => {
     try {
         if (req.user.roles !== 'admin') {
@@ -35,4 +33,4 @@ const isAdmin = async (req, res, next) => {
     }
 };
 
-module.exports = { auth, isAdmin }; 
+module.exports = { auth, isAdmin };

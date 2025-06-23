@@ -7,6 +7,7 @@ class TravelsService {
     this.moment = moment;
   }
 
+  // Récupère tous les voyages
   async getAllTravels() {
     try {
       const allTravels = await this.travelsRepository.findAll();
@@ -16,6 +17,7 @@ class TravelsService {
     }
   }
 
+  // Récupère un voyage par son id
   async getTravelById(id) {
     try {
       const travel = await this.travelsRepository.findByPk(id);
@@ -28,6 +30,7 @@ class TravelsService {
     }
   }
 
+  // Crée un nouveau voyage
   async createTravel(travelData) {
     try {
       const newTravel = await this.travelsRepository.create(travelData);
@@ -40,6 +43,7 @@ class TravelsService {
     }
   }
 
+  // Met à jour un voyage par son id
   async updateTravel(id, travelData) {
     try {
       const travel = await this.travelsRepository.findByPk(id);
@@ -50,13 +54,13 @@ class TravelsService {
       if (!updated) {
         return new Error("No travels found");
       }
-
       return { message: "Travel updated successfully" };
     } catch (error) {
       throw new Error("Error updating travel: " + error.message);
     }
   }
 
+  // Récupère un voyage pour édition
   async editTravels(id) {
     try {
       const travel = await this.travelsRepository.findByPk(id);
@@ -69,19 +73,21 @@ class TravelsService {
     }
   }
 
+  // Supprime un voyage
   async deleteTravel(id) {
     try {
       const travel = await this.travelsRepository.findByPk(id);
       if (!travel) {
         throw new Error("Travel not found");
       }
-      await this.travelsRepository.destroy( id );
+      await this.travelsRepository.destroy(id);
       return { message: "Travel deleted successfully" };
     } catch (error) {
       throw new Error("Error deleting travel: " + error.message);
     }
   }
 
+  // Change le statut "done" d'un voyage
   async toggleDone(id) {
     try {
       const travel = await this.travelsRepository.findByPk(id);
